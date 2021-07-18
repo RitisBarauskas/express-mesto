@@ -1,4 +1,4 @@
-const mogoose = require('mongoose');
+const mogoose = require("mongoose");
 
 const cardSchema = new mogoose.Schema({
   name: {
@@ -15,16 +15,16 @@ const cardSchema = new mogoose.Schema({
 
   owner: {
     type: mogoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: "user",
     required: true,
   },
 
   likes: [
     {
       type: mogoose.Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
       required: true,
-      default: '',
+      default: "",
     },
   ],
 
@@ -34,4 +34,4 @@ const cardSchema = new mogoose.Schema({
   },
 });
 
-module.exports = mogoose.model('card', cardSchema);
+module.exports = mogoose.model("card", cardSchema);
