@@ -42,9 +42,10 @@ module.exports.getUser = (req, res) => {
       if (err.statusCode === ERROR_CODE_404) {
         return res.status(ERROR_CODE_404).send({ message: err.message });
       }
-      if (err.statusCode === ERROR_CODE_400) {
+      else if (err.name === 'CastError') {
         return  res.status(ERROR_CODE_400).send({ message: 'Неизвестный ID' });
-      } else {
+      }
+      else {
         res.status(ERROR_CODE_500).send({ message: "Некорректный запрос" });
       }
     });
