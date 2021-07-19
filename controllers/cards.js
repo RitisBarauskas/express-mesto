@@ -14,8 +14,9 @@ module.exports.createCard = (req, res) => {
         res.status(ERROR_CODE_400).send({
           message: "Переданы некорректные данные при создании карточки",
         });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -29,7 +30,7 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .orFail(() => {
-      const error = new Error("Пользователь с таким ID не найден");
+      const error = new Error("Отсутствует удаляемая карточка");
       error.statusCode = 404;
       throw error;
     })
@@ -37,11 +38,11 @@ module.exports.deleteCard = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -60,11 +61,11 @@ module.exports.likeCard = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -83,10 +84,10 @@ module.exports.dislikeCard = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };

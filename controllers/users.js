@@ -13,8 +13,9 @@ module.exports.createUser = (req, res) => {
         res.status(ERROR_CODE_400).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -38,12 +39,11 @@ module.exports.getUser = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -64,12 +64,15 @@ module.exports.updateUser = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else if (err.name === "ValidationError") {
+        res
+          .status(ERROR_CODE_400)
+          .send({ message: "Пришли невалидные данные" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
 
@@ -86,11 +89,14 @@ module.exports.updateAvatar = (req, res) => {
     .catch((err) => {
       if (err.statusCode === ERROR_CODE_404) {
         res.status(ERROR_CODE_404).send({ message: err.message });
-      }
-      if (err.name === "CastError") {
+      } else if (err.name === "CastError") {
         res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+      } else if (err.name === "ValidationError") {
+        res
+          .status(ERROR_CODE_400)
+          .send({ message: "Пришли невалидные данные" });
+      } else {
+        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
       }
-
-      res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
     });
 };
