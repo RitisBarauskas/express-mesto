@@ -19,17 +19,15 @@ const cardSchema = new mogoose.Schema({
     required: true,
   },
 
-  likes: [
-    {
-      type: [
-        {
-          type: mogoose.Schema.Types.ObjectId,
-          ref: "user",
-        },
-      ],
-      default: [],
-    },
-  ],
+  likes: {
+    type: [
+      {
+        type: mogoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    default: [],
+  },
 
   createdAt: {
     type: Date,
