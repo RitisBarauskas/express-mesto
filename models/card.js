@@ -21,10 +21,13 @@ const cardSchema = new mogoose.Schema({
 
   likes: [
     {
-      type: mogoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-      default: "",
+      type: [
+        {
+          type: mogoose.Schema.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      default: [],
     },
   ],
 
