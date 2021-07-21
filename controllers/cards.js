@@ -28,6 +28,9 @@ module.exports.getAllCards = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
+  const userId = req.user._id;
+  return res.send({ userId });
+
   Card.findByIdAndRemove(cardId)
     .orFail(() => {
       const error = new Error("Отсутствует удаляемая карточка");

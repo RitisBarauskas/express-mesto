@@ -1,12 +1,23 @@
 const mogoose = require("mongoose");
 
 const userSchema = new mogoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+  },
+
   name: {
     type: String,
     minlength: 2,
     maxlength: 30,
     default: "Ritis Barauskas",
-    required: true,
   },
 
   about: {
@@ -14,14 +25,12 @@ const userSchema = new mogoose.Schema({
     minlength: 2,
     maxlength: 30,
     default: "SuperDeveloper",
-    required: true,
   },
 
   avatar: {
     type: String,
     default:
       "https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png",
-    required: true,
   },
 });
 

@@ -5,17 +5,17 @@ const mongoose = require("mongoose");
 
 const users = require("./routes/users");
 const cards = require("./routes/cards");
+const { login, createUser } = require("./controllers/users");
+const auth = require("./middlewares/auth");
 
 const app = express();
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: "60f4321ce6da4a1f44121fbd",
-  };
 
-  next();
-});
+app.post('/signin', login);
+app.post('/signup', createUser);
+
+app.use(auth);
 app.use("/users", users);
 app.use("/cards", cards);
 
