@@ -29,24 +29,38 @@ module.exports.getAllCards = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   const userId = req.user._id;
-  return res.send({ userId });
-
-  Card.findByIdAndRemove(cardId)
-    .orFail(() => {
-      const error = new Error("Отсутствует удаляемая карточка");
-      error.statusCode = 404;
-      throw error;
-    })
-    .then((card) => res.send({ data: card }))
-    .catch((err) => {
-      if (err.statusCode === ERROR_CODE_404) {
-        res.status(ERROR_CODE_404).send({ message: err.message });
-      } else if (err.name === "CastError") {
-        res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
-      } else {
-        res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
+  Card.findById(cardId)
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({
+          message: "Отсутствует удаляемая карточка",
+        });
       }
-    });
+      if (userId !== String(card.owner)) {
+        console.log(userId);
+        console.log(card.owner);
+        return res.status(400).send({
+          message: "Удалять можно только свои карточки",
+        });
+      }
+      return Card.findByIdAndRemove(cardId)
+        .orFail(() => {
+          const error = new Error("Отсутствует удаляемая карточка");
+          error.statusCode = 404;
+          throw error;
+        })
+        .then((card) => res.send({ data: card }))
+        .catch((err) => {
+          if (err.statusCode === ERROR_CODE_404) {
+            res.status(ERROR_CODE_404).send({ message: err.message });
+          } else if (err.name === "CastError") {
+            res.status(ERROR_CODE_400).send({ message: "Неизвестный ID" });
+          } else {
+            res.status(ERROR_CODE_500).send({ message: "Произошла ошибка" });
+          }
+        });
+    })
+    .catch((err) => console.log(err));
 };
 
 module.exports.likeCard = (req, res) => {
