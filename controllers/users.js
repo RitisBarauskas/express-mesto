@@ -120,6 +120,7 @@ module.exports.login = (req, res) => {
     })
   } else {
     User.findOne({ email })
+      .select("+password")
       .then((user) => {
         if (!user) {
           res.status(409).send({
@@ -135,7 +136,7 @@ module.exports.login = (req, res) => {
               const userToken = jwt.sign(
                 { _id: user._id },
                 JWT_SECRET_KEY,
-                { expiresIn: '7d' });
+                { expiresIn: "7d" });
               res.send({ token: userToken })
             }
           })

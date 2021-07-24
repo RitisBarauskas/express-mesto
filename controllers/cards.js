@@ -37,8 +37,6 @@ module.exports.deleteCard = (req, res) => {
         });
       }
       if (userId !== String(card.owner)) {
-        console.log(userId);
-        console.log(card.owner);
         return res.status(400).send({
           message: "Удалять можно только свои карточки",
         });
