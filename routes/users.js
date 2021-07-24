@@ -1,5 +1,4 @@
 const users = require("express").Router();
-const { celebrate, Joi } = require('celebrate');
 
 const {
   getUsers,
@@ -9,14 +8,20 @@ const {
   getProfileMe,
 } = require("../controllers/users");
 
+const {
+  validationUserID,
+  validationUpdateAvatar,
+  validationUpdateUser,
+} = require("../utils/validations");
+
 users.get("/", getUsers);
 
 users.get("/me", getProfileMe);
 
-users.get("/:userId", getUser);
+users.get("/:userId", validationUserID, getUser);
 
-users.patch("/me", updateUser);
+users.patch("/me", validationUpdateUser, updateUser);
 
-users.patch("/me/avatar", updateAvatar);
+users.patch("/me/avatar", validationUpdateAvatar, updateAvatar);
 
 module.exports = users;
