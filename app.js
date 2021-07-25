@@ -8,6 +8,7 @@ const cards = require("./routes/cards");
 const { login, createUser } = require("./controllers/users");
 const auth = require("./middlewares/auth");
 const { validationSignIn, validationSignUp } = require("./utils/validations");
+const { handleError } = require("./errors");
 
 const app = express();
 
@@ -27,12 +28,7 @@ app.use(auth);
 app.use("/users", users);
 app.use("/cards", cards);
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? "На сервере произошла ошибка" : message,
-  });
-});
+app.use(handleError);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

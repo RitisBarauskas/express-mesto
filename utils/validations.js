@@ -1,4 +1,13 @@
 const { celebrate, Joi } = require("celebrate");
+const validator = require("validator");
+
+const method = (value) => {
+  const result = validator.isURL(value);
+  if (result) {
+    return value;
+  }
+  throw new Error("URL validation err");
+};
 
 const validationUserID = celebrate({
   params: Joi.object().keys({
@@ -15,22 +24,14 @@ const validationUpdateUser = celebrate({
 
 const validationUpdateAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string()
-      .required()
-      .pattern(
-        /https?:\/\/(w{3}\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,300}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/
-      ),
+    avatar: Joi.string().required().custom(method),
   }),
 });
 
 const validationCreateCard = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string()
-      .required()
-      .pattern(
-        /https?:\/\/(w{3}\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,300}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/
-      ),
+    link: Joi.string().required().custom(method),
   }),
 });
 
@@ -44,9 +45,7 @@ const validationSignUp = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(
-      /https?:\/\/(w{3}\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,300}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/
-    ),
+    avatar: Joi.string().custom(method),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(2),
   }),
