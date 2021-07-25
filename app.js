@@ -1,4 +1,5 @@
 const express = require("express");
+const { errors } = require("celebrate");
 
 const { PORT = 3000 } = process.env;
 const mongoose = require("mongoose");
@@ -27,6 +28,7 @@ app.post("/signup", validationSignUp, createUser);
 app.use(auth);
 app.use("/users", users);
 app.use("/cards", cards);
+app.use(errors());
 
 app.use(handleError);
 

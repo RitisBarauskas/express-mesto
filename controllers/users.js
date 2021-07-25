@@ -109,7 +109,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       bcrypt.compare(password, user.password, (err, isValid) => {
         if (!isValid) {
-          throw new UnauthorizedError("Пароль некорректный");
+          return next(new UnauthorizedError("Пароль некорректный"));
         }
         const userToken = jwt.sign({ _id: user._id }, JWT_SECRET_KEY, {
           expiresIn: "7d",
