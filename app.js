@@ -9,7 +9,8 @@ const cards = require("./routes/cards");
 const { login, createUser } = require("./controllers/users");
 const auth = require("./middlewares/auth");
 const { validationSignIn, validationSignUp } = require("./utils/validations");
-const { handleError } = require("./errors");
+const { handleError } = require("./middlewares/handleError");
+const { notFoundPage } = require("./middlewares/notFoundPage");
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(auth);
 app.use("/users", users);
 app.use("/cards", cards);
 app.use(errors());
-
+app.get("*", notFoundPage);
 app.use(handleError);
 
 app.listen(PORT, () => {
